@@ -25,7 +25,6 @@ class AuthMethods{
       // Ensure all fields are filled out
       if (name.isNotEmpty &&
           email.isNotEmpty &&
-          experience.isNotEmpty &&
           location.isNotEmpty &&
           number.isNotEmpty &&
           password.isNotEmpty &&
@@ -114,5 +113,6 @@ class AuthMethods{
     DocumentSnapshot snap=await _fireStore.collection('users').doc(currentUser.uid).get();
     return Userdata.fromSnap(snap);
   }
+
 }
 

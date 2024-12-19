@@ -47,5 +47,6 @@ class Userdata {
       imageurl: snapshot['imageurl'],
     );
   }
+
 }
 

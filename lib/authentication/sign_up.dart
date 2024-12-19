@@ -269,30 +269,32 @@ class _RegisterPageState extends State<RegisterPage> {
                   style: TextStyle(fontSize: 16,color: Colors.white),
                 ),
               ),
-              SizedBox(height: 10.0,),
-              SizedBox(
-                width: MediaQuery.of(context).size.width/1.1,
-                child: TextFormField(
-                  controller: experienceController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      labelText: "Experiences" ,
-                      labelStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      hintText: "Enter your Experiences",
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(vertical:10.0,horizontal: 20.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      prefixIcon: Icon(Icons.shopping_bag,color: Colors.white,)
+              if(gender!='Customer')...[
+                SizedBox(height: 10.0,),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width/1.1,
+                  child: TextFormField(
+                    controller: experienceController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        labelText: "Experiences" ,
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        ),
+                        hintText: "Enter your Experiences",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical:10.0,horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        prefixIcon: Icon(Icons.shopping_bag,color: Colors.white,)
+                    ),
+                    style: TextStyle(fontSize: 16,color: Colors.white),
                   ),
-                  style: TextStyle(fontSize: 16,color: Colors.white),
                 ),
-              ),
+              ],
               SizedBox(height: 10.0,),
               SizedBox(
                 width: MediaQuery.of(context).size.width/1.1,

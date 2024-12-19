@@ -1,6 +1,9 @@
+import 'package:be_food/models/note.dart';
+import 'package:be_food/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -64,10 +67,55 @@ class _DelevaryfeedState extends State<Delevaryfeed> {
       );
     }
   }
+  void initState() {
+    updateData();
+    // TODO: implement initState
+    super.initState();
+  }
+  updateData() async{
+    UserProvider userProvider =Provider.of(context,listen: false);
+    await userProvider.refreshUser();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Userdata? userdata =Provider.of<UserProvider>(context).getUser;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 70,
+        backgroundColor: Colors.black,
+        title: Row(
+          children: [
+            SizedBox(width: 10),
+            Image.asset("assets/images/logo.png", height: 35, width: 35),
+            SizedBox(width: 5),
+            Text(
+              "Be-Food",
+              style: GoogleFonts.abel(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 20,
+            child: CircleAvatar(
+              radius: 18,
+              backgroundImage: userdata!.imageurl!= null
+                  ? NetworkImage(userdata!.imageurl!)
+                  : AssetImage("assets/images/file.png")
+              as ImageProvider,
+            ),
+          ),
+          SizedBox(width: 20,)
+        ],
+
+      ),
       backgroundColor: Colors.white10,
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),

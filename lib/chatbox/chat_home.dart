@@ -25,14 +25,46 @@ class _ChatHomeState extends State<ChatHome> {
     UserProvider userProvider =Provider.of(context,listen: false);
     await userProvider.refreshUser();
   }
-
-
-
   @override
   Widget build(BuildContext context) {
     Userdata? userdata =Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 70,
+        backgroundColor: Colors.black,
+        title: Row(
+          children: [
+            SizedBox(width: 10),
+            Image.asset("assets/images/logo.png", height: 35, width: 35),
+            SizedBox(width: 5),
+            Text(
+              "ChatBox",
+              style: GoogleFonts.abel(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 20,
+            child: CircleAvatar(
+              radius: 18,
+              backgroundImage: userdata!.imageurl!= null
+                  ? NetworkImage(userdata!.imageurl!)
+                  : AssetImage("assets/images/file.png")
+              as ImageProvider,
+            ),
+          ),
+          SizedBox(width: 20,)
+        ],
+
+      ),
+      backgroundColor: Colors.white,
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
@@ -52,31 +84,39 @@ class _ChatHomeState extends State<ChatHome> {
               final phoneNumber = client['number'];  // Assuming `phone` field exists
               final clientWidget = Card(
                 margin: EdgeInsets.all(10),
-                child: ListTile(
-                  onTap: (){
-                    Get.to(ChatPage(receivedemail: client['email'],receivedname: client['name'],imageurl:client['imageurl'] ,receivedID: client['uid']));
-                  },
-                  leading: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(client['imageurl'] ?? ''),
-                  ),
-                  title: Text(
-                    client['name'],
-                    style: GoogleFonts.abel(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: LinearGradient(
+                      colors: [Colors.black, Colors.white70], // Red and Yellow gradient
+                      begin: Alignment.topLeft, // Start of the gradient
+                      end: Alignment.bottomRight, // End of the gradient
                     ),
                   ),
-                  subtitle: Text(
-                    client['role'] ?? '',
-                    style: GoogleFonts.abel(
-                      fontSize: 15,
-                      color: Colors.black,
+                  child: ListTile(
+                    onTap: (){
+                      Get.to(ChatPage(receivedemail: client['email'],receivedname: client['name'],imageurl:client['imageurl'] ,receivedID: client['uid']));
+                    },
+                    leading: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: NetworkImage(client['imageurl'] ?? ''),
+                    ),
+                    title: Text(
+                      client['name'],
+                      style: GoogleFonts.abel(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    subtitle: Text(
+                      client['role'] ?? '',
+                      style: GoogleFonts.abel(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-
-
                 ),
               );
               clientWidgets.add(clientWidget);

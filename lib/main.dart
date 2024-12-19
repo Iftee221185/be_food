@@ -4,6 +4,7 @@ import 'package:be_food/authentication/login_page.dart';
 import 'package:be_food/firebase/firebase_options.dart';
 import 'package:be_food/navbar/home.dart';
 import 'package:be_food/splash_screen/splash_screen.dart';
+import 'package:be_food/ui_for_customer/server_key.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,13 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'provider/user_provider.dart';
 import 'package:be_food/navbar/navbar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // Check if Firebase is already initialized before initializing it
   try {
+
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions
           .currentPlatform, // This is assuming you're using firebase_options.dart
@@ -25,6 +27,7 @@ void main() async {
     // Firebase has already been initialized
     print("Firebase initialization failed: $e");
   }
+
   runApp(const MyApp());
 }
 

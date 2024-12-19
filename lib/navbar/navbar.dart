@@ -6,6 +6,11 @@ import 'package:be_food/delevaryman/delevaryfeed.dart';
 import 'package:be_food/models/note.dart';
 import 'package:be_food/navbar/home.dart';
 import 'package:be_food/provider/user_provider.dart';
+import 'package:be_food/ui_for_chef/post_interface.dart';
+import 'package:be_food/ui_for_customer/customer_home.dart';
+import 'package:be_food/ui_for_customer/customer_profile.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,259 +25,206 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  int selectedIndex=1;
-  void ontabbed(int index)
-  {
+  int selectedIndex = 2;
+  void ontabbed(int index) {
     setState(() {
-      selectedIndex=index;
+      selectedIndex = index;
     });
-
   }
+  int _currentIndex = 0;
+  PageController _pageController= PageController();
+
+  @override
   void initState() {
     updateData();
-    // TODO: implement initState
     super.initState();
-  }
-  updateData() async{
-    UserProvider userProvider =Provider.of(context,listen: false);
-    await userProvider.refreshUser();
+    _pageController = PageController();
+    pageController = PageController(initialPage: _tabIndex);
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+  int _tabIndex = 2;
+  int get tabIndex => _tabIndex;
+  set tabIndex(int v) {
+    _tabIndex = v;
+    setState(() {});
+  }
+
+  late PageController pageController;
+
+  updateData() async {
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+  }
+  @override
   Widget build(BuildContext context) {
-    Userdata? userdata =Provider.of<UserProvider>(context).getUser;
+    Userdata? userdata = Provider.of<UserProvider>(context).getUser;
     if (userdata == null) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator()), // Or show a default screen
+        body: Center(
+            child: CircularProgressIndicator()), // Or show a default screen
       );
     }
-    else if(userdata.role=='Chef') {
-        return Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 80,
-            backgroundColor: Colors.black,
-            automaticallyImplyLeading: false,
-            title: Row(
-              children: [
-                Image.asset("assets/images/logo.png",height: 50,width: 50,),
-                SizedBox(width: 10,),
-                Text("Be-Food",style:GoogleFonts.abel(
-                    fontSize: 45,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.yellow
-                ),),
-              ],
-            ),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  AwesomeDialog (
-                    context: context,
-                    dialogType: DialogType.question,
-                    headerAnimationLoop: false,
-                    animType: AnimType.bottomSlide,
-                    title: 'Logout',
-                    desc: 'Are you sure want to Logout?',
-                    buttonsTextStyle:
-                    const TextStyle(color: Colors.white),
-                    showCloseIcon: true,
-                    btnCancelOnPress: () {},
-                    btnOkText: 'YES',
-                    btnCancelText: 'NO',
-                    btnOkOnPress: () {
-
-                      FirebaseAuth.instance.signOut();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> FirstPage()));
-
-                    },
-                  ).show();
-
-                },
-                icon: Icon(Icons.logout,color: Colors.white,),
-              ),
-            ],
-          ),
-          body: Center(
-            child: pages.elementAt(selectedIndex),
-          ),
-
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.black,
-            items:<BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.home,size: 35,color: Colors.white,
-              ),
-                label: "Home",
-                backgroundColor: Colors.white,
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.message,size: 35,color: Colors.white,
-              ),
-                label: "Chat",
-                backgroundColor: Colors.white,
-              ),
-
-
-              BottomNavigationBarItem(icon: Icon(Icons.person,size: 35,color: Colors.white,),
-                label: "Profile",
-                backgroundColor: Colors.white,
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.bike_scooter,size: 35,color: Colors.white,),
-                label: "Delivary-Man",
-                backgroundColor: Colors.white,
-              ),
-            ],
-            type: BottomNavigationBarType.fixed,
-            // type: BottomNavigationBarType.shifting,
-            currentIndex: selectedIndex,
-            selectedItemColor: Colors.yellowAccent,
-            iconSize: 40,
-            onTap: ontabbed,
-          ),
-        );
-
-      }
-    else if(userdata.role=='Customer'){
-       return Scaffold(
-    appBar: AppBar(
-    toolbarHeight: 80,
-    backgroundColor: Colors.black,
-    automaticallyImplyLeading: false,
-    title: Row(
-    children: [
-    Image.asset("assets/images/logo.png",height: 50,width: 50,),
-    SizedBox(width: 10,),
-    Text("Be-Food",style:GoogleFonts.abel(
-    fontSize: 45,
-    fontWeight: FontWeight.bold,
-    color: Colors.yellow
-    ),),
-    ],
-    ),
-    actions: [
-    IconButton(
-    onPressed: () async {
-    AwesomeDialog (
-    context: context,
-    dialogType: DialogType.question,
-    headerAnimationLoop: false,
-    animType: AnimType.bottomSlide,
-    title: 'Logout',
-    desc: 'Are you sure want to Logout?',
-    buttonsTextStyle:
-    const TextStyle(color: Colors.white),
-    showCloseIcon: true,
-    btnCancelOnPress: () {},
-    btnOkText: 'YES',
-    btnCancelText: 'NO',
-    btnOkOnPress: () {
-
-    FirebaseAuth.instance.signOut();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> FirstPage()));
-
-    },
-    ).show();
-
-    },
-    icon: Icon(Icons.logout,color: Colors.white,),
-    ),
-    ],
-    ),
-    body: Center(
-    child: pages1.elementAt(selectedIndex),
-    ),
-
-    bottomNavigationBar: BottomNavigationBar(
-    backgroundColor: Colors.black,
-    items:<BottomNavigationBarItem>[
-    BottomNavigationBarItem(icon: Icon(Icons.home,size: 35,color: Colors.white,
-    ),
-    label: "Home",
-    backgroundColor: Colors.white,
-    ),
-      BottomNavigationBarItem(icon: Icon(Icons.message,size: 35,color: Colors.white,
-      ),
-        label: "Chat",
-        backgroundColor: Colors.white,
-      ),
-    BottomNavigationBarItem(icon: Icon(Icons.person,size: 35,color: Colors.white,),
-    label: "Profile",
-    backgroundColor: Colors.white,
-    ),
-    ],
-    type: BottomNavigationBarType.fixed,
-    // type: BottomNavigationBarType.shifting,
-    currentIndex: selectedIndex,
-    selectedItemColor: Colors.yellowAccent,
-    iconSize: 40,
-    onTap: ontabbed,
-    ),
-    );
-    }
-
-    else{
+    else if (userdata.role == 'Chef') {
       return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          backgroundColor: Colors.black,
-          automaticallyImplyLeading: false,
-          title: Row(
-            children: [
-              Image.asset("assets/images/logo.png",height: 50,width: 50,),
-              SizedBox(width: 10,),
-              Text("Be-Food",style:GoogleFonts.abel(
-                  fontSize: 45,
+        extendBody: true,
+        bottomNavigationBar: CircleNavBar(
+          activeIcons: const [
+            Icon(Icons.person, color: Colors.black),
+            Icon(Icons.messenger, color: Colors.black),
+            Icon(Icons.home, color: Colors.black),
+            Icon(Icons.post_add, color: Colors.black),
+            Icon(Icons.man, color: Colors.black),
+          ],
+          inactiveIcons:  [
+            Text(
+              "Profile",
+              style: GoogleFonts.abel(
                   fontWeight: FontWeight.bold,
-                  color: Colors.yellow
-              ),),
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                AwesomeDialog (
-                  context: context,
-                  dialogType: DialogType.question,
-                  headerAnimationLoop: false,
-                  animType: AnimType.bottomSlide,
-                  title: 'Logout',
-                  desc: 'Are you sure want to Logout?',
-                  buttonsTextStyle:
-                  const TextStyle(color: Colors.white),
-                  showCloseIcon: true,
-                  btnCancelOnPress: () {},
-                  btnOkText: 'YES',
-                  btnCancelText: 'NO',
-                  btnOkOnPress: () {
-
-                    FirebaseAuth.instance.signOut();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> FirstPage()));
-
-                  },
-                ).show();
-
-              },
-              icon: Icon(Icons.logout,color: Colors.white,),
+                  fontSize: 13,
+                  color: Colors.black),
+            ),
+            Text(
+              "Chatbox",
+              style: GoogleFonts.abel(fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            Text(
+              "Home",
+              style: GoogleFonts.abel(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            Text(
+              "Post",
+              style: GoogleFonts.abel(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            Text(
+              "DelevaryMan",
+              style: GoogleFonts.abel(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: Colors.black),
             ),
           ],
+          color: Colors.white,
+          height: 50,
+          circleWidth: 50,
+          activeIndex: tabIndex,
+          onTap: (index) {
+            tabIndex = index;
+            pageController.jumpToPage(tabIndex);
+          },
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
+          cornerRadius: const BorderRadius.only(
+            topLeft: Radius.circular(8),
+            topRight: Radius.circular(8),
+            bottomRight: Radius.circular(24),
+            bottomLeft: Radius.circular(24),
+          ),
+          shadowColor: Colors.black,
+          elevation: 3,
         ),
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (v) {
+            tabIndex = v;
+          },
+          children: [
+            CustomerProfile(),
+            ChatHome(),
+            CustomerHome(),
+            AddPosts(),
+            Delevaryfeed(),
+
+          ],
+        ),
+      );
+    }
+    else if (userdata.role == 'Customer') {
+      return Scaffold(
+        body: SizedBox.expand(
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() => _currentIndex = index);
+            },
+            children: <Widget>[
+              CustomerHome(),
+              ChatHome(),
+              CustomerProfile(),
+            ],
+          ),
+        ),
+          bottomNavigationBar: BottomNavyBar(
+            selectedIndex: _currentIndex,
+            showElevation: true, // use this to remove appBar's elevation
+            onItemSelected: (index) => setState(() {
+              _currentIndex = index;
+              _pageController.animateToPage(index,
+                  duration: Duration(milliseconds: 300), curve: Curves.ease);
+            }),
+            items: [
+              BottomNavyBarItem(
+                icon: Icon(Icons.apps),
+                title: Text('Home'),
+                activeColor: Colors.black,
+              ),
+              BottomNavyBarItem(
+                  icon: Icon(Icons.message),
+                  title: Text('Messages'),
+                  activeColor: Colors.black
+              ),
+              BottomNavyBarItem(
+                  icon: Icon(Icons.person),
+                  title: Text('Settings'),
+                  activeColor: Colors.black
+              ),
+            ],
+          )
+      );
+    }
+    else {
+      return Scaffold(
         body: Center(
           child: pages2.elementAt(selectedIndex),
         ),
-
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black,
-          items:<BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home,size: 35,color: Colors.white,
-            ),
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 25,
+                color: Colors.white,
+              ),
               label: "Home",
               backgroundColor: Colors.white,
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.message,size: 35,color: Colors.white,
-            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.message,
+                size: 25,
+                color: Colors.white,
+              ),
               label: "Chat",
               backgroundColor: Colors.white,
             ),
-
-            BottomNavigationBarItem(icon: Icon(Icons.person,size: 35,color: Colors.white,),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                size: 25,
+                color: Colors.white,
+              ),
               label: "Profile",
               backgroundColor: Colors.white,
             ),
@@ -286,24 +238,17 @@ class _NavbarState extends State<Navbar> {
         ),
       );
     }
-
   }
 
-  List<Widget> pages= <Widget> [
+  List<Widget> pages = <Widget>[
     Home(),
     ChatHome(),
-    Homepage(),
+    CustomerProfile(),
     Delevaryfeed(),
   ];
-  List<Widget> pages1= <Widget> [
-    CustomerFeed(),
+  List<Widget> pages2 = <Widget>[
+    CustomerHome(),
     ChatHome(),
-    Homepage(),
+    CustomerProfile(),
   ];
-  List<Widget> pages2= <Widget> [
-    Delevaryfeed(),
-    ChatHome(),
-    Homepage(),
-  ];
-
 }

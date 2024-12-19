@@ -51,6 +51,20 @@ dependencies:
   cloudinary_public: ^0.23.1
   awesome_dialog: ^3.2.1
   url_launcher: ^6.3.1
+  lottie: ^3.2.0
+  carousel_slider: ^5.0.0
+  cached_network_image: ^3.4.1
+  like_button: ^2.0.5
+  bottom_navy_bar: ^6.1.0
+  circle_nav_bar: ^2.1.1
+  filepicker_windows: ^2.1.4
+  photo_manager: ^3.6.3
+  permission_handler: ^11.3.1
+  device_info_plus: ^11.2.0
+  firebase_messaging: ^15.1.6
+  googleapis_auth: ^1.6.0
+  firebase_analytics: ^11.3.6
+  flutter_rating_stars: ^1.1.0
 
 dev_dependencies:
   flutter_test:

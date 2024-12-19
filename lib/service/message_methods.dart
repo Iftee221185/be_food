@@ -11,8 +11,15 @@ class ChatService extends ChangeNotifier {
     final String currentUserId = _firebaseAuth.currentUser!.uid;
     final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
     final Timestamp timestamp = Timestamp.now();
-    // final chattime=DateTime.now();
-    // final time=chattime.t
+    var date = DateTime.now();
+    var date1 = date.day.toString().padLeft(2, '0');  // Ensures two digits for the day
+    var date2 = date.month.toString().padLeft(2, '0'); // Ensures two digits for the month
+    var date3 = date.year.toString();
+    var todaysdate = "$date1-$date2-$date3";
+    var time3 = date.hour.toString().padLeft(2, '0');  // Adds leading zero if needed
+    var time4 = date.minute.toString().padLeft(2, '0'); // Adds leading zero if needed
+    var time = "$time3:$time4";  // Concatenate as 'HH:mm'
+
 
     //create a new message
     Message newMessage = Message(
@@ -20,7 +27,9 @@ class ChatService extends ChangeNotifier {
         senderEmail: currentUserEmail,
         receiverId: receivedId,
         message: message,
-        timestamp: timestamp
+        timestamp: timestamp,
+        date:todaysdate,
+        time:time,
     );
 
     //chatroom id
