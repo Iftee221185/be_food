@@ -199,7 +199,7 @@ class _NavbarState extends State<Navbar> {
           child: pages2.elementAt(selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.black,
+          backgroundColor:   Colors.black,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
@@ -227,7 +227,7 @@ class _NavbarState extends State<Navbar> {
               ),
               label: "Profile",
               backgroundColor: Colors.white,
-            ),
+              ),
           ],
           type: BottomNavigationBarType.fixed,
           // type: BottomNavigationBarType.shifting,
